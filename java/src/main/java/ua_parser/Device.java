@@ -24,6 +24,9 @@ import java.util.Map;
  * @author Steve Jiang (@sjiang) <gh at iamsteve com>
  */
 public class Device {
+  private static final String MOBILE_DEVICE = "Mobile Device";
+  private static final String DESKTOP = "Desktop";
+
   public final String family;
   public final boolean isMobile, isSpider;
 
@@ -60,7 +63,10 @@ public class Device {
   @Override
   public String toString() {
     return String.format("{family: %s, is_mobile: %s, is_spider: %s}",
-                         family == null ? null : '"' + family + '"',
-                         isMobile, isSpider);
+                         getFamily(), isMobile, isSpider);
+  }
+
+  public String getFamily(){
+    return family==null || family.length()==0 ? (isMobile?MOBILE_DEVICE:DESKTOP) : family;
   }
 }

@@ -55,7 +55,6 @@ public class DeviceParser {
 
     String osFamily = device == null ? "Other" : device;
     userAgentFamily = userAgentFamily == null ? "Other" : userAgentFamily;
-
     return new Device(device,
                       mobileUAFamilies.contains(userAgentFamily) || mobileOSFamilies.contains(osFamily),
                       (device != null && device.equals("Spider")));

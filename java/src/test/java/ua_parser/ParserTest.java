@@ -118,12 +118,19 @@ public class ParserTest {
     InputStream yamlStream = this.getClass().getResourceAsStream(TEST_RESOURCE_PATH + filename);
 
     List<Map> testCases = (List<Map>) ((Map)yaml.load(yamlStream)).get("test_cases");
+    int failures=0;
     for(Map<String, String> testCase : testCases) {
       // Skip tests with js_ua as those overrides are not yet supported in java
       if (testCase.containsKey("js_ua")) continue;
 
+      try{
       assertThat(parser.parseUserAgent(testCase.get("user_agent_string")), is(UserAgent.fromMap(testCase)));
+      } catch (Throwable e) {
+        System.out.println(testCase.get("user_agent_string")+ "\n"+e.getMessage());
+        failures++;
+      }
     }
+    assertEquals(0, failures);
   }
 
   void testOSFromYaml(String filename) {
@@ -149,6 +156,6 @@ public class ParserTest {
 
   Parser parserFromStringConfig(String configYamlAsString) throws Exception {
     InputStream yamlInput = new ByteArrayInputStream(configYamlAsString.getBytes("UTF8"));
-    return new Parser(yamlInput);
+    return new Parser(yamlInput,true);
   }
 }

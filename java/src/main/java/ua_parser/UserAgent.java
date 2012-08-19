@@ -24,13 +24,16 @@ import java.util.Map;
  * @author Steve Jiang (@sjiang) <gh at iamsteve com>
  */
 public class UserAgent {
+  private static final String UNKNOWN = "unknown";
   public final String family, major, minor, patch;
+  public final boolean isSpider;
 
   public UserAgent(String family, String major, String minor, String patch) {
     this.family = family;
     this.major = major;
     this.minor = minor;
     this.patch = patch;
+    this.isSpider = "spider".equalsIgnoreCase(this.family);
   }
 
   public static UserAgent fromMap(Map<String, String> m) {
@@ -65,6 +68,31 @@ public class UserAgent {
                          major == null ? null : '"' + major + '"',
                          minor == null ? null : '"' + minor + '"',
                          patch == null ? null : '"' + patch + '"');
+  }
+
+  public String getFullVersion() {
+    return getVersion(true, true);
+  }
+  public String getShortVersion(){
+    return getVersion(true, false);
+  }
+
+  public String getVersion(boolean includeMinor, boolean includePatch) {
+    StringBuilder sb = new StringBuilder();
+    if (major != null) {
+      sb.append(major);
+      if (includeMinor && minor != null) {
+        sb.append(".").append(minor);
+        if (includePatch && patch != null) {
+          sb.append(".").append(patch);
+        }
+      }
+    }
+    return sb.length() > 0 ? sb.toString() : UNKNOWN;
+  }
+
+  public String getFamily(){
+    return family==null || family.length()==0 ? UNKNOWN: family;
   }
 
 }

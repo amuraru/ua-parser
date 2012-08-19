@@ -58,4 +58,8 @@ public class Client {
     return String.format("{user_agent: %s, os: %s, device: %s}",
                          userAgent, os, device);
   }
+
+  public boolean isSpider() {
+    return device.isSpider || userAgent.isSpider;
+  }
 }
