@@ -1,8 +1,9 @@
 user_agent_parsers:
 #### SPECIAL CASES BOTS ####
+
   #Bots
-  - name: 'bot|borg|BookishBot|Java|Ruby|curl|check_http|httpclient|PHP|Crawler|PycURL|Wget|TwengaBot|Python-urllib|twitterbot|facebookexternalhit|pingdom.com_bot_version|webcrawler|bot|googlebot|borg|bingbot|slurp|msnbot|msrbot|openbot|archiver|netresearch|lycos|scooter|altavista|teoma|gigabot|baiduspider|blitzbot|oegp|charlotte|furlbot|http%20client|polybot|htdig|ichiro|mogimogi|larbin|pompos|scrubby|searchsight|seekbot|semanticdiscovery|silk|snappy|speedy|spider|voila|vortex|voyager|zao|zeal|fast\-webcrawler|converacrawler|dataparksearch|findlinks'
-    exclude: googletv
+  #NB: order matters to identify bot name
+  - name: 'twitterbot|facebookexternalhit|googlebot|bingbot|msnbot|baiduspider|pingdom.com_bot_version|TwengaBot|BookishBot|slurp|msrbot|openbot|archiver|netresearch|lycos|scooter|altavista|teoma|gigabot|blitzbot|oegp|charlotte|furlbot|http%20client|polybot|htdig|ichiro|mogimogi|larbin|pompos|scrubby|searchsight|seekbot|semanticdiscovery|silk|snappy|speedy|spider|voila|vortex|voyager|zao|zeal|fast\-webcrawler|converacrawler|dataparksearch|findlinks|Java|Ruby|curl|check_http|httpclient|urlresolver|WebCopier|InAGist URL Resolver|AppleCoreMedia|NSPlayer|python-requests|GoogleToolbar|EMail Exractor|SiteSucker|dom2dom|Nutch|extractor|libwww-perl|js-kit|HTTrack|MobileRSSFree|AppEngine-Google|metauri|Python-httplib2|UnwindFetchor|HTTP_Request|PHP|Crawler|PycURL|Wget|Python-urllib|bot|borg|webcrawler'
     version_sep: ''
     family_replacement: 'Spider'
 

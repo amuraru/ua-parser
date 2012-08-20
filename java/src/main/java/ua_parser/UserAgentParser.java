@@ -17,6 +17,7 @@ package ua_parser;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,6 +35,8 @@ import java.util.regex.Pattern;
  * @author Adrian Muraru (@adimuraru) <amuraru at adobe com>
  */
 public class UserAgentParser {
+  static final String SPIDER = "spider";
+
   private final List<UAMatcher> matchers;
 
   public UserAgentParser(List<UAMatcher> patterns) {
@@ -86,15 +89,15 @@ public class UserAgentParser {
      * List of strings to look for, at least one needs to match the full UA string The strings in
      * this list are also used to find the browser version : i.e. name/VERSION
      */
-    private Iterable<String> names;
+    private List<String> names;
     /**
      * additional list of strings that needs to be checked in order to complete the match
      */
-    private Iterable<String> require;
+    private List<String> require;
     /**
      * optional exclude
      */
-    private Iterable<String> exclude;
+    private List<String> exclude;
 
 
     private final String familyReplacement;
@@ -104,14 +107,14 @@ public class UserAgentParser {
         String versionSeparator) {
 
       if (name != null) {
-        names = Splitter.on("|").trimResults().split(name.toLowerCase());
+        names = Lists.newLinkedList(Splitter.on("|").trimResults().split(name.toLowerCase()));
       }
 
       if (require != null) {
-        this.require = Splitter.on(",").split(require.toLowerCase());
+        this.require = Lists.newLinkedList(Splitter.on(",").split(require.toLowerCase()));
       }
       if (exclude != null) {
-        this.exclude = Splitter.on(",").split(exclude.toLowerCase());
+        this.exclude = Lists.newLinkedList(Splitter.on(",").split(exclude.toLowerCase()));
       }
       this.familyReplacement = familyReplacement;
       if (versionSeparator != null)
@@ -120,7 +123,10 @@ public class UserAgentParser {
 
     @Override
     public UserAgent match(String agentString) {
-      if (this.names == null || agentString == null || agentString.length() == 0) {
+      if (agentString == null || agentString.length() == 0) {
+        return new UserAgent(SPIDER, null, null, null);
+      }
+      if (this.names == null){
         return null;
       }
 
@@ -140,14 +146,18 @@ public class UserAgentParser {
           }
           if (exclude != null) {
             // else, excludes?
-            /*for (String exc : exclude) {
+            for (String exc : exclude) {
               if (agentString.contains(exc)) {
-                System.out.println("exception matched:"+exc + " for: "+agentString);
                 return null;
               }
-            }*/
+            }
           }
           // matched! extract version if required
+          if (familyReplacement.equalsIgnoreCase(SPIDER)){
+            //special case for SPIDER, version is the bot name
+            return new UserAgent(familyReplacement, name, null, null);
+          }
+          //else, not bot
           if (this.versionSeparator.length()>0){
             versionComponents = new String[3];
             StringBuilder sb = new StringBuilder(name);

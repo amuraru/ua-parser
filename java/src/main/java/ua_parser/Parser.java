@@ -48,7 +48,7 @@ public class Parser {
   Cache<String, Client> uaCache;
   private boolean disableCache = true;
 
-  public Parser() throws IOException {
+  public Parser() {
     this(Parser.class.getResourceAsStream(REGEX_YAML_PATH_MINIMAL), false);
   }
 

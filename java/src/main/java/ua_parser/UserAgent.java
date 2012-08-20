@@ -25,6 +25,7 @@ import java.util.Map;
  */
 public class UserAgent {
   private static final String UNKNOWN = "unknown";
+
   public final String family, major, minor, patch;
   public final boolean isSpider;
 
@@ -33,7 +34,7 @@ public class UserAgent {
     this.major = major;
     this.minor = minor;
     this.patch = patch;
-    this.isSpider = "spider".equalsIgnoreCase(this.family);
+    this.isSpider = UserAgentParser.SPIDER.equalsIgnoreCase(this.family);
   }
 
   public static UserAgent fromMap(Map<String, String> m) {
