@@ -105,7 +105,7 @@ public class ParserTest {
     Parser testParser = parserFromStringConfig(testConfig);
     Client result = testParser.parse("ABC12\\34 (CashPhone-$9.0.1 CatOS OH-HAI=/^.^\\=)");
     assertThat(result.userAgent.family, is("ABC (12\\34)"));
-    assertThat(result.os.family, is("CatOS 9000"));
+    assertThat(result.os.getFamily(), is("CatOS 9000"));
     assertThat(result.device.family, is("CashPhone $9"));
   }
 

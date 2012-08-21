@@ -67,6 +67,6 @@ public class Device {
   }
 
   public String getFamily(){
-    return family==null || family.length()==0 ? (isMobile?MOBILE_DEVICE:DESKTOP) : family;
+    return family == null || family.length() == 0 ? (isMobile ? MOBILE_DEVICE : DESKTOP) : family;
   }
 }

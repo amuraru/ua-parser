@@ -24,7 +24,17 @@ import java.util.Map;
  * @author Steve Jiang (@sjiang) <gh at iamsteve com>
  */
 public class OS {
-  public final String family, major, minor, patch, patchMinor;
+  private static final String UNKNOWN = "unknown";
+
+  private final String family;
+
+  private final String major;
+
+  private final String minor;
+
+  private final String patch;
+
+  private final String patchMinor;
 
   public OS(String family, String major, String minor, String patch, String patchMinor) {
     this.family = family;
@@ -44,7 +54,7 @@ public class OS {
     if (!(other instanceof OS)) return false;
 
     OS o = (OS) other;
-    return ((this.family != null && this.family.equals(o.family)) || this.family == o.family) &&
+    return ((this.getFamily() != null && this.getFamily().equals(o.getFamily())) || this.getFamily() == o.getFamily()) &&
            ((this.major != null && this.major.equals(o.major)) || this.major == o.major) &&
            ((this.minor != null && this.minor.equals(o.minor)) || this.minor == o.minor) &&
            ((this.patch != null && this.patch.equals(o.patch)) || this.patch == o.patch) &&
@@ -53,7 +63,7 @@ public class OS {
 
   @Override
   public int hashCode() {
-    int h = family == null ? 0 : family.hashCode();
+    int h = getFamily() == null ? 0 : getFamily().hashCode();
     h += major == null ? 0 : major.hashCode();
     h += minor == null ? 0 : minor.hashCode();
     h += patch == null ? 0 : patch.hashCode();
@@ -64,10 +74,38 @@ public class OS {
   @Override
   public String toString() {
     return String.format("{family: %s, major: %s, minor: %s, patch: %s, patch_minor: %s}",
-                         family == null ? null : '"' + family + '"',
+                         getFamily() == null ? null : '"' + getFamily() + '"',
                          major == null ? null : '"' + major + '"',
                          minor == null ? null : '"' + minor + '"',
                          patch == null ? null : '"' + patch + '"',
                          patchMinor == null ? null : '"' + patchMinor + '"');
+  }
+
+  public String getFamily() {
+    return family==null || family.length()==0 ? UNKNOWN : family;
+  }
+
+  public String getFullVersion() {
+    return getVersion(true, true,true);
+  }
+  public String getShortVersion(){
+    return getVersion(true, false, false);
+  }
+
+  public String getVersion(boolean includeMinor, boolean includePatch, boolean includePatchMinor) {
+    StringBuilder sb = new StringBuilder();
+    if (major != null && major.length()>0) {
+      sb.append(major);
+      if (includeMinor && minor != null && minor.length()>0) {
+        sb.append(".").append(minor);
+        if (includePatch && patch != null && patch.length()>0) {
+          sb.append(".").append(patch);
+          if (includePatchMinor && patchMinor != null && patchMinor.length()>0) {
+            sb.append(".").append(patchMinor);
+          }
+        }
+      }
+    }
+    return sb.length() > 0 ? sb.toString() : UNKNOWN;
   }
 }
