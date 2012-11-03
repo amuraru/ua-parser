@@ -3,4 +3,7 @@ node_modules
 TAGS
 dist
 cabal-dev
+java/target
+java/test-output
+*.pyc
 
