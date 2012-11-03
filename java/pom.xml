@@ -46,10 +46,7 @@
       </testResource>
       <testResource>
         <targetPath>ua_parser</targetPath>
-        <directory>${basedir}/../test_resources</directory>
-        <includes>
-          <include>*.yaml</include>
-        </includes>
+        <directory>src/test/resources</directory>
       </testResource>
     </testResources>
   </build>
