@@ -1,8 +1,11 @@
+## User-Agent rules parsed top-down (on success the matcher breaks)
+## This is a fork of the full regex rules file: https://github.com/tobie/ua-parser/blob/master/regexes.yaml
+## with simple non-regex (read expensive parsing) string rules on top to cover the most common user-agents
+## Needs to be updated periodically to cover future UA strings
+
 user_agent_parsers:
 #### SPECIAL CASES BOTS ####
-
-  #Bots
-  #NB: order matters to identify bot name
+#NB: the order matters to identify bot name
   - name: 'twitterbot|facebookexternalhit|googlebot|bingbot|msnbot|baiduspider|pingdom.com_bot_version|TwengaBot|BookishBot|slurp|msrbot|openbot|archiver|netresearch|lycos|scooter|altavista|teoma|gigabot|blitzbot|oegp|charlotte|furlbot|http%20client|polybot|htdig|ichiro|mogimogi|larbin|pompos|scrubby|searchsight|seekbot|semanticdiscovery|silk|snappy|speedy|spider|voila|vortex|voyager|zao|zeal|fast\-webcrawler|converacrawler|dataparksearch|findlinks|Java/|Ruby|curl|check_http|httpclient|urlresolver|WebCopier|InAGist URL Resolver|AppleCoreMedia|NSPlayer|python-requests|GoogleToolbar|EMail Exractor|SiteSucker|dom2dom|Nutch|extractor|libwww-perl|js-kit|HTTrack|MobileRSSFree|AppEngine-Google|metauri|Python-httplib2|UnwindFetchor|HTTP_Request|PHP|Crawler|PycURL|Wget|Python-urllib|bot|borg|webcrawler'
     version_sep: ''
     family_replacement: 'Spider'
@@ -116,38 +119,43 @@ user_agent_parsers:
   #### END MAIN CASES ####
 
   #### SPECIAL CASES ####
-  - regex: '(BonEcho)/(\d+)\.(\d+)\.(\d+)'
-    family_replacement: 'Bon Echo'
+  - regex: '(iPod).+Version/(\d+)\.(\d+)\.(\d+)'
+    family_replacement: 'Mobile Safari'
+  - regex: '(iPod).*Version/(\d+)\.(\d+)'
+    family_replacement: 'Mobile Safari'
   - regex: '(iPhone).*Version/(\d+)\.(\d+)\.(\d+)'
     family_replacement: 'Mobile Safari'
   - regex: '(iPhone).*Version/(\d+)\.(\d+)'
-    family_replacement: 'Mobile Safari'
-  - regex: '(iPhone)'
     family_replacement: 'Mobile Safari'
   - regex: '(iPad).*Version/(\d+)\.(\d+)\.(\d+)'
     family_replacement: 'Mobile Safari'
   - regex: '(iPad).*Version/(\d+)\.(\d+)'
     family_replacement: 'Mobile Safari'
-  - regex: '(iPad)'
+  - regex: '(iPod|iPhone|iPad);.*CPU.*OS (\d+)(?:_\d+)?_(\d+).*Mobile'
     family_replacement: 'Mobile Safari'
-  - regex: '(iPod).+Version/(\d+)\.(\d+)\.(\d+)'
+  - regex: '(iPod|iPhone|iPad)'
     family_replacement: 'Mobile Safari'
-  - regex: '(iPod).*Version/(\d+)\.(\d+)'
-    family_replacement: 'Mobile Safari'
-  - regex: '(iPod)'
+
+  - regex: '(BonEcho)/(\d+)\.(\d+)\.(\d+)'
+    family_replacement: 'Bon Echo'
+  - regex: '(PLAYSTATION) (\d+)'
+    family_replacement: 'PlayStation'
+  - regex: '(PlayStation Portable)[^\d]+(\d+).(\d+)'
+  - regex: '(WebBrowser)/(\d+)\.(\d+)(?:\.([0-9\-]+))? SmartTV'
+    family_replacement: 'Maple Browser'
 
 
   # nokia browsers
   # based on: http://www.developer.nokia.com/Community/Wiki/User-Agent_headers_for_Nokia_devices
   - regex: '^(Nokia)'
-    family_replacement: 'Nokia WAP Browser'
+    family_replacement: 'Nokia Services (WAP) Browser'
   - regex: '(NokiaBrowser)/(\d+)\.(\d+).(\d+)\.(\d+)'
   - regex: '(NokiaBrowser)/(\d+)\.(\d+).(\d+)'
   - regex: '(NokiaBrowser)/(\d+)\.(\d+)'
   - regex: '(BrowserNG)/(\d+)\.(\d+).(\d+)'
-    family_replacement: 'Nokia Browser'
+    family_replacement: 'NokiaBrowser'
   - regex: '(Series60)/5\.0'
-    family_replacement: 'Nokia Browser'
+    family_replacement: 'NokiaBrowser'
     v1_replacement: '7'
     v2_replacement: '0'
   - regex: '(Series60)/(\d+)\.(\d+)'
@@ -168,7 +176,7 @@ user_agent_parsers:
   - regex: '(Silk)/(\d+)\.(\d+)(?:\.([0-9\-]+))?'
 
   # WebKit Nightly
-  - regex: '(AppleWebKit)/(\d+)\.?(\d+)?\+ .* Version/\d+\.\d+.\d+ Safari/'
+  - regex: '(AppleWebKit)/(\d+)\.?(\d+)?\+ .* Safari'
     family_replacement: 'WebKit Nightly'
 
   # Safari
@@ -283,6 +291,11 @@ os_parsers:
   - regex: '(iPhone|iPad|iPod).*Mac OS X.*Version/(\d+)\.(\d+)'
     os_replacement: 'iOS'
 
+  - regex: '(AppleTV)/(\d+)\.(\d+)'
+    os_replacement: 'ATV OS X'
+    os_v1_replacement: '$1'
+    os_v2_replacement: '$2'
+
   ##########
   # Chrome OS
   # if version 0.0.0, probably this stuff:
@@ -349,6 +362,7 @@ os_parsers:
 
   # first.second bits
   - regex: '(Ubuntu|Kindle|Bada|Lubuntu|BackTrack|Red Hat|Slackware)/(\d+)\.(\d+)'
+  - regex: '(PlayStation Vita) (\d+)\.(\d+)'
 
   # just os
   - regex: '(Windows|OpenBSD|FreeBSD|NetBSD|Ubuntu|Kubuntu|Android|Arch Linux|CentOS|WeTab|Slackware)'
@@ -382,7 +396,7 @@ device_parsers:
   - regex: 'Sprint APA(9292)'
     device_replacement: 'HTC $1 (Sprint)'
   - regex: 'HTC ([A-Za-z0-9]+ [A-Z])'
-    device_replacement: HTC $1
+    device_replacement: 'HTC $1'
   - regex: 'HTC-([A-Za-z0-9]+)'
     device_replacement: 'HTC $1'
   - regex: 'HTC_([A-Za-z0-9]+)'
@@ -392,6 +406,12 @@ device_parsers:
   - regex: '(ADR[A-Za-z0-9]+)'
     device_replacement: 'HTC $1'
   - regex: '(HTC)'
+
+  # Samsung
+  - regex: '(SamsungSGHi560)'
+    device_replacement: 'Samsung SGHi560'
+  - regex: '(SmartTV)'
+    device_replacement: 'Samsung SmartTV'
 
   #########
   # Ericsson - must come before nokia since they also use symbian
@@ -455,6 +475,12 @@ device_parsers:
     device_replacement: 'HP Veer'
 
   ##########
+  # PlayStation
+  ##########
+  - regex: '(PlayStation Portable)'
+  - regex: '(PlayStation Vita)'
+  
+  ##########
   # incomplete!
   # Kindle
   ##########
@@ -462,6 +488,14 @@ device_parsers:
   - regex: '(Kindle)'
   - regex: '(Silk)/(\d+)\.(\d+)(?:\.([0-9\-]+))?'
     device_replacement: 'Kindle Fire'
+
+  ##########
+  # AppleTV
+  # No built in browser that I can tell
+  # Stack Overflow indicated iTunes-AppleTV/4.1 as a known UA for app available and I'm seeing it in live traffic
+  ##########
+  - regex: '(AppleTV)'
+    device_replacement: 'AppleTV'
 
   ##########
   # complete but probably catches spoofs
@@ -617,6 +651,12 @@ device_parsers:
     device_replacement: 'Softbank $1'
 
   ##########
+  # Sony
+  ##########
+  - regex: '(PlayStation3 PPC)'
+    device_replacement: 'Playstation 3'
+
+  ##########
   # Generic Smart Phone
   ##########
   - regex: '(hiptop|avantgo|plucker|xiino|blazer|elaine|up.browser|up.link|mmp|smartphone|midp|wap|vodafone|o2|pocket|mobile|pda)'
@@ -646,8 +686,8 @@ mobile_user_agent_families:
   - 'Playstation Portable'
   - 'Nokia'
   - 'Nokia Series 40 Ovi Browser'
-  - 'Nokia WAP Browser'
-  - 'Nokia Browser'
+  - 'Nokia Services (WAP) Browser'
+  - 'NokiaBrowser'
   - 'Nokia OSS Browser'
   - 'Blackberry'
   - 'Blackberry WebKit'
